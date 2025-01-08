@@ -133,7 +133,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
- # Coloque la ruta relativa al archivo con la clave privada
+# Coloque la ruta relativa al archivo con la clave privada
 FIREBASE_CRED = credentials.Certificate("keys/landing-key.json")
 
 # Inicialice la conexión con el Realtime Database con la clave privada y la URL de referencia
