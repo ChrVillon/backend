@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render
 
 # Create your views here.
@@ -28,16 +29,43 @@ def index(request):
     print("Endpoint ", url)
     print("Response ", response_dict)
 
+    responses_list = list(response_dict.values())
+
+    def clean_datetime_string(date_str):
+        date_str = date_str.replace('\xa0', ' ')
+        return date_str.strip()
+
+    for response in responses_list:
+        response['saved'] = clean_datetime_string(response['saved'])
+
+    first_response = responses_list[0]['saved']
+    print('primera respuesta', first_response)
+
+    last_response = responses_list[-1]['saved']
+
     # Respuestas totales
     total_responses = len(response_dict.keys())
 
     # Valores de la respuesta
     responses = response_dict.values()
 
+    from collections import defaultdict
+    responses_by_day = defaultdict(list)
+    for response in responses:
+        day = response['saved'].split(",")[0]
+        responses_by_day[day].append(response)
+
+    max_day = max(responses_by_day, key=lambda day: len(responses_by_day[day]))
+    max_responses = len(responses_by_day[max_day])
+
     # Objeto con los datos a renderizar
     data = {
         'title': 'Landing - Dashboard',
         'total_responses': total_responses,
+        'first_response': first_response,
+        'max_day': max_day,
+        'max_responses': max_responses,
+        'last_response': last_response,
         'responses': responses
     }
 
